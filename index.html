@@ -1,0 +1,2404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER HACKING SIMULATOR - FUNPAY ULTIMATE</title>
+    <style>
+        :root {
+            --dark-bg: #0a0a0a;
+            --neon-orange: #ff6b00;
+            --matrix-green: #00ff41;
+            --hacker-red: #ff3333;
+            --cyber-blue: #00a8ff;
+            --neon-purple: #9d00ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background: var(--dark-bg);
+            color: var(--matrix-green);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 65, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 107, 0, 0.05) 0%, transparent 20%);
+            overflow-x: hidden;
+        }
+        
+        .cyber-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header Styles */
+        .cyber-header {
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid var(--neon-orange);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cyber-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--matrix-green), transparent);
+            animation: scanline 3s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .header-title {
+            text-align: center;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, var(--neon-orange), var(--matrix-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+        
+        .player-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-card {
+            background: rgba(0, 30, 15, 0.7);
+            border: 1px solid var(--matrix-green);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 255, 65, 0.2);
+        }
+        
+        .info-icon {
+            font-size: 1.8em;
+            color: var(--neon-orange);
+        }
+        
+        /* Game Area */
+        .game-area {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .sidebar {
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid var(--cyber-blue);
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 600px;
+        }
+        
+        .main-game {
+            background: rgba(15, 15, 15, 0.95);
+            border: 2px solid var(--neon-orange);
+            border-radius: 15px;
+            padding: 25px;
+            min-height: 600px;
+            overflow: hidden;
+        }
+        
+        .game-log {
+            background: rgba(0, 20, 10, 0.9);
+            border: 1px solid var(--matrix-green);
+            border-radius: 10px;
+            padding: 15px;
+            height: 600px;
+            overflow-y: auto;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        /* Buttons */
+        .cyber-btn {
+            background: linear-gradient(45deg, var(--neon-orange), #ff8c00);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            margin: 8px 0;
+            width: 100%;
+        }
+        
+        .cyber-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 107, 0, 0.4);
+        }
+        
+        .cyber-btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-red {
+            background: linear-gradient(45deg, var(--hacker-red), #ff5555);
+        }
+        
+        .btn-green {
+            background: linear-gradient(45deg, var(--matrix-green), #00cc44);
+        }
+        
+        .btn-blue {
+            background: linear-gradient(45deg, var(--cyber-blue), #0097e6);
+        }
+        
+        /* Mini Games Grid */
+        .mini-games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .mini-game-card {
+            background: rgba(30, 30, 30, 0.9);
+            border: 2px solid var(--cyber-blue);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mini-game-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--matrix-green);
+            box-shadow: 0 10px 25px rgba(0, 255, 65, 0.3);
+        }
+        
+        .game-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .game-title {
+            font-size: 1.3em;
+            color: var(--neon-orange);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: rgba(15, 15, 15, 0.95);
+            border: 3px solid var(--neon-orange);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 50px rgba(255, 107, 0, 0.5);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--matrix-green);
+        }
+        
+        .modal-title {
+            font-size: 1.8em;
+            color: var(--neon-orange);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .close-modal {
+            background: var(--hacker-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            transform: rotate(90deg);
+            background: #ff0000;
+        }
+        
+        /* Game Canvas */
+        .game-canvas {
+            width: 100%;
+            height: 400px;
+            background: rgba(0, 20, 10, 0.9);
+            border: 2px solid var(--matrix-green);
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Bitcoin Shooter Elements */
+        .bitcoin {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #f7931a, #ff9800);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px #f7931a;
+            animation: float 2s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Crypto Runner Elements */
+        .runner {
+            position: absolute;
+            width: 50px;
+            height: 80px;
+            background: linear-gradient(45deg, #00a8ff, #0097e6);
+            bottom: 0;
+            left: 50px;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .obstacle {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            background: var(--hacker-red);
+            bottom: 0;
+            border-radius: 5px;
+        }
+        
+        .coin-element {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #ffd700, #ff9800);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Hacking Simulator */
+        .hacking-code-line {
+            padding: 8px 15px;
+            margin: 5px 0;
+            background: rgba(0, 30, 15, 0.7);
+            border-left: 3px solid var(--matrix-green);
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .hacking-code-line:hover {
+            background: rgba(0, 40, 20, 0.9);
+            border-left-color: var(--neon-orange);
+        }
+        
+        .hacking-code-line.vulnerability:hover {
+            background: rgba(255, 30, 30, 0.3);
+            border-left-color: var(--hacker-red);
+        }
+        
+        /* Crypto Puzzle */
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .puzzle-card {
+            width: 100%;
+            aspect-ratio: 1;
+            background: rgba(0, 40, 20, 0.9);
+            border: 2px solid var(--cyber-blue);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .puzzle-card:hover {
+            transform: scale(1.05);
+            border-color: var(--matrix-green);
+        }
+        
+        /* Password Cracker */
+        .cracker-char {
+            background: rgba(0, 30, 15, 0.8);
+            border: 1px solid var(--cyber-blue);
+            color: white;
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        
+        .cracker-char:hover {
+            background: var(--cyber-blue);
+            transform: scale(1.1);
+        }
+        
+        /* Trojan Defender */
+        .defender {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: linear-gradient(45deg, #00ff41, #00cc44);
+            bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+        
+        .trojan {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #ff3333, #cc0000);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.7);
+        }
+        
+        .bullet {
+            position: absolute;
+            width: 6px;
+            height: 15px;
+            background: var(--cyber-blue);
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(0, 168, 255, 0.8);
+        }
+        
+        /* Skills Tree */
+        .skills-tree {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .skill-node {
+            background: rgba(0, 40, 20, 0.8);
+            border: 2px solid var(--cyber-blue);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-node:hover {
+            border-color: var(--matrix-green);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+        
+        .skill-node.active {
+            border-color: var(--neon-orange);
+            background: rgba(255, 107, 0, 0.2);
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(10, 10, 10, 0.95);
+            border-left: 5px solid var(--neon-orange);
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            display: none;
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Footer */
+        .cyber-footer {
+            background: rgba(10, 10, 10, 0.9);
+            border-top: 2px solid var(--neon-orange);
+            padding: 20px;
+            text-align: center;
+            margin-top: 30px;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .admin-footer {
+            display: none;
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid var(--hacker-red);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar, .game-log {
+                min-height: auto;
+                height: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2em;
+            }
+            
+            .player-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .mini-games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 30, 15, 0.5);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-orange);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--matrix-green);
+        }
+        
+        /* New Mini Games */
+        .virus {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, #ff3333, #cc0000);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.7);
+        }
+        
+        .firewall {
+            position: absolute;
+            width: 20px;
+            height: 100px;
+            background: linear-gradient(to right, #00ff41, #00a8ff);
+        }
+        
+        .crypto-card {
+            background: rgba(0, 40, 20, 0.9);
+            border: 2px solid var(--cyber-blue);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .crypto-card:hover {
+            transform: scale(1.05);
+            border-color: var(--matrix-green);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
+        }
+        
+        .developer-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 30, 15, 0.7);
+            border-radius: 10px;
+            border: 1px solid var(--cyber-blue);
+        }
+        
+        .contacts {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .contact-item {
+            padding: 10px;
+            background: rgba(0, 40, 20, 0.9);
+            border-radius: 8px;
+            border-left: 3px solid var(--neon-orange);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="cyber-container">
+        <!-- Header -->
+        <header class="cyber-header">
+            <h1 class="header-title">
+                <i class="fas fa-user-secret"></i> CYBER HACKING SIMULATOR
+                <span style="font-size: 0.6em; display: block; margin-top: 10px;">FUNPAY ULTIMATE</span>
+            </h1>
+            
+            <div class="player-info">
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-user"></i></div>
+                    <div>
+                        <div style="font-size: 0.9em; color: #888;">ИГРОК</div>
+                        <div id="playerUsername" style="font-weight: bold; color: var(--neon-orange);">[Гость]</div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-coins"></i></div>
+                    <div>
+                        <div style="font-size: 0.9em; color: #888;">БАЛАНС</div>
+                        <div id="cashAmount" style="font-weight: bold; color: var(--matrix-green);">0₽</div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-chart-line"></i></div>
+                    <div>
+                        <div style="font-size: 0.9em; color: #888;">УРОВЕНЬ</div>
+                        <div id="playerLevel" style="font-weight: bold; color: var(--cyber-blue);">1</div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-bolt"></i></div>
+                    <div>
+                        <div style="font-size: 0.9em; color: #888;">ЭНЕРГИЯ</div>
+                        <div id="playerEnergy" style="font-weight: bold; color: #ffcc00;">100%</div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon"><i class="fas fa-users"></i></div>
+                    <div>
+                        <div style="font-size: 0.9em; color: #888;">ОНЛАЙН</div>
+                        <div id="onlineCount" style="font-weight: bold; color: var(--neon-purple);">12</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <button class="cyber-btn" onclick="document.getElementById('authModal').style.display='flex'">
+                    <i class="fas fa-sign-in-alt"></i> ВОЙТИ
+                </button>
+                <button id="logoutBtn" class="cyber-btn btn-red" onclick="logout()" style="display: none;">
+                    <i class="fas fa-sign-out-alt"></i> ВЫЙТИ
+                </button>
+                <button id="adminHeaderBtn" class="cyber-btn" onclick="openAdminPanel()" style="background: linear-gradient(45deg, #ff00ff, #9d00ff);">
+                    <i class="fas fa-user-shield"></i> АДМИН
+                </button>
+            </div>
+        </header>
+        
+        <!-- Main Game Area -->
+        <div class="game-area">
+            <!-- Left Sidebar -->
+            <div class="sidebar">
+                <h3 style="color: var(--neon-orange); margin-bottom: 20px; text-align: center;">
+                    <i class="fas fa-gamepad"></i> ДЕЙСТВИЯ
+                </h3>
+                
+                <button class="cyber-btn" onclick="playScene('work')">
+                    <i class="fas fa-briefcase"></i> РАБОТА
+                </button>
+                
+                <button class="cyber-btn btn-red" onclick="playScene('hack')">
+                    <i class="fas fa-user-secret"></i> ВЗЛОМ
+                </button>
+                
+                <button class="cyber-btn btn-green" onclick="playScene('mine')">
+                    <i class="fas fa-digging"></i> МАЙНИНГ
+                </button>
+                
+                <button class="cyber-btn" style="background: linear-gradient(45deg, #9d00ff, #ff00ff);" onclick="showMiniGames()">
+                    <i class="fas fa-puzzle-piece"></i> МИНИ-ИГРЫ
+                </button>
+                
+                <hr style="border-color: var(--cyber-blue); margin: 20px 0;">
+                
+                <h3 style="color: var(--cyber-blue); margin-bottom: 15px; text-align: center;">
+                    <i class="fas fa-store"></i> МАГАЗИНЫ
+                </h3>
+                
+                <button class="cyber-btn" onclick="openOrangeShop()" style="background: linear-gradient(45deg, #ff6b00, #ff8c00);">
+                    ORANGE SHOP
+                </button>
+                
+                <button class="cyber-btn" onclick="openBlackShop()" style="background: linear-gradient(45deg, #333, #000);">
+                    BLACK SHOP
+                </button>
+                
+                <hr style="border-color: var(--cyber-blue); margin: 20px 0;">
+                
+                <h3 style="color: var(--matrix-green); margin-bottom: 15px; text-align: center;">
+                    <i class="fas fa-chart-bar"></i> СТАТИСТИКА
+                </h3>
+                
+                <div style="background: rgba(0, 30, 15, 0.7); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>₿ Bitcoin:</span>
+                        <span id="btcAmount" style="color: #f7931a;">0.00000000</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Ξ Ethereum:</span>
+                        <span id="ethAmount" style="color: #627eea;">0.0000</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>FUNCOIN:</span>
+                        <span id="funcoinAmount" style="color: var(--neon-orange);">0</span>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(0, 20, 40, 0.7); padding: 15px; border-radius: 10px;">
+                    <div style="margin-bottom: 10px; color: var(--cyber-blue);">
+                        <i class="fas fa-code"></i> Навыки:
+                    </div>
+                    <div class="skills-tree">
+                        <div class="skill-node" onclick="upgradeSkill('hacking')">
+                            <i class="fas fa-user-secret"></i>
+                            <small>Взлом</small>
+                        </div>
+                        <div class="skill-node" onclick="upgradeSkill('mining')">
+                            <i class="fas fa-digging"></i>
+                            <small>Майнинг</small>
+                        </div>
+                        <div class="skill-node" onclick="upgradeSkill('programming')">
+                            <i class="fas fa-code"></i>
+                            <small>Кодинг</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Game Content -->
+            <div class="main-game">
+                <div id="gameScene">
+                    <div style="text-align: center; padding: 50px 20px;">
+                        <i class="fas fa-user-secret" style="font-size: 4em; color: var(--neon-orange); margin-bottom: 20px;"></i>
+                        <h2 style="color: var(--matrix-green); margin-bottom: 20px;">ДОБРО ПОЖАЛОВАТЬ В КИБЕРПРОСТРАНСТВО</h2>
+                        <p style="color: #888; margin-bottom: 30px; line-height: 1.6;">
+                            Испытайте себя в роли хакера, майнера и программиста.<br>
+                            Зарабатывайте деньги, улучшайте навыки и становитесь легендой!
+                        </p>
+                        
+                        <div style="max-width: 600px; margin: 0 auto;">
+                            <div id="miniGamesSection" style="display: none;">
+                                <h3 style="color: var(--neon-orange); margin-bottom: 30px;">
+                                    <i class="fas fa-gamepad"></i> МИНИ-ИГРЫ
+                                </h3>
+                                
+                                <div class="mini-games-grid">
+                                    <div class="mini-game-card" onclick="openGameModal('virusAttack')">
+                                        <div class="game-icon">🦠</div>
+                                        <div class="game-title">VIRUS ATTACK</div>
+                                        <div class="game-desc">Создавайте и управляйте вирусами!</div>
+                                    </div>
+                                    
+                                    <div class="mini-game-card" onclick="openGameModal('firewallDefense')">
+                                        <div class="game-icon">🛡️</div>
+                                        <div class="game-title">FIREWALL DEFENSE</div>
+                                        <div class="game-desc">Защитите систему от атак!</div>
+                                    </div>
+                                    
+                                    <div class="mini-game-card" onclick="openGameModal('cryptoFlip')">
+                                        <div class="game-icon">🎮</div>
+                                        <div class="game-title">CRYPTO FLIP</div>
+                                        <div class="game-desc">Угадайте сторону монеты!</div>
+                                    </div>
+                                    
+                                    <div class="mini-game-card" onclick="openGameModal('bitcoinShooter')">
+                                        <div class="game-icon">₿</div>
+                                        <div class="game-title">BITCOIN SHOOTER</div>
+                                        <div class="game-desc">Стреляйте по биткоинам и зарабатывайте!</div>
+                                    </div>
+                                    
+                                    <div class="mini-game-card" onclick="openGameModal('cryptoRunner')">
+                                        <div class="game-icon">🏃</div>
+                                        <div class="game-title">CRYPTO RUNNER</div>
+                                        <div class="game-desc">Бегите, собирайте криптовалюту!</div>
+                                    </div>
+                                    
+                                    <div class="mini-game-card" onclick="openGameModal('hackingSimulator')">
+                                        <div class="game-icon">💻</div>
+                                        <div class="game-title">HACKING SIMULATOR</div>
+                                        <div class="game-desc">Найдите уязвимости в коде!</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 40px;">
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                                    <div style="text-align: left;">
+                                        <h4 style="color: var(--cyber-blue); margin-bottom: 10px;">
+                                            <i class="fas fa-info-circle"></i> ИНФОРМАЦИЯ
+                                        </h4>
+                                        <ul style="color: #aaa; padding-left: 20px;">
+                                            <li>Начните с регистрации</li>
+                                            <li>Выполняйте задания</li>
+                                            <li>Играйте в мини-игры</li>
+                                            <li>Улучшайте навыки</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div style="text-align: left;">
+                                        <h4 style="color: var(--matrix-green); margin-bottom: 10px;">
+                                            <i class="fas fa-trophy"></i> ДОСТИЖЕНИЯ
+                                        </h4>
+                                        <ul style="color: #aaa; padding-left: 20px;">
+                                            <li>Заработайте 10000₽</li>
+                                            <li>Достигните 10 уровня</li>
+                                            <li>Соберите 1 BTC</li>
+                                            <li>Взломайте 50 систем</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Sidebar -->
+            <div class="sidebar">
+                <h3 style="color: var(--matrix-green); margin-bottom: 20px; text-align: center;">
+                    <i class="fas fa-scroll"></i> ЛОГ СИСТЕМЫ
+                </h3>
+                
+                <div class="game-log" id="gameLog">
+                    <div style="color: #888; margin-bottom: 10px;">> Система инициализирована...</div>
+                    <div style="color: #888; margin-bottom: 10px;">> Добро пожаловать в киберпространство!</div>
+                    <div style="color: #888; margin-bottom: 10px;">> Готов к работе...</div>
+                </div>
+                
+                <hr style="border-color: var(--cyber-blue); margin: 20px 0;">
+                
+                <h3 style="color: var(--cyber-blue); margin-bottom: 15px; text-align: center;">
+                    <i class="fas fa-comments"></i> МУЛЬТИПЛЕЕР
+                </h3>
+                
+                <div style="background: rgba(0, 20, 40, 0.7); padding: 15px; border-radius: 10px; height: 200px; overflow-y: auto; margin-bottom: 15px;" id="multiplayerChat">
+                    <div style="color: #00ffff; margin-bottom: 8px;"><strong>System:</strong> Чат загружен</div>
+                    <div style="color: #888; margin-bottom: 8px;"><strong>CryptoKing:</strong> Привет всем!</div>
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="chatInput" placeholder="Сообщение..." style="flex: 1; padding: 10px; background: rgba(0, 30, 15, 0.7); border: 1px solid var(--cyber-blue); border-radius: 5px; color: white;">
+                    <button class="cyber-btn" onclick="sendChatMessage()" style="width: auto; padding: 10px 20px;">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <!-- Контакты разработчика -->
+                <div class="developer-info">
+                    <h4 style="color: var(--neon-orange); margin-bottom: 15px; text-align: center;">
+                        <i class="fas fa-code"></i> РАЗРАБОТЧИК
+                    </h4>
+                    <div class="contacts">
+                        <div class="contact-item">
+                            <strong style="color: var(--matrix-green);">@AleshaPopovlch</strong>
+                            <div style="color: #888; font-size: 0.9em;">За реквизитами и покупками</div>
+                        </div>
+                        <div class="contact-item">
+                            <strong style="color: var(--cyber-blue);">@MalayaFunPay</strong>
+                            <div style="color: #888; font-size: 0.9em;">Реклама/сотрудничество</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="cyber-footer">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <div>
+                    <div style="color: var(--matrix-green); font-weight: bold;">CYBER HACKING SIMULATOR</div>
+                    <div style="color: #888; font-size: 0.9em;">Разработчик: @AleshaPopovlch | Реклама: @MalayaFunPay</div>
+                </div>
+                
+                <div style="display: flex; gap: 15px;">
+                    <div style="text-align: center;">
+                        <div style="color: var(--neon-orange); font-size: 1.2em;" id="playerXP">0/100</div>
+                        <div style="color: #888; font-size: 0.9em;">Опыт</div>
+                    </div>
+                    
+                    <div style="width: 2px; background: var(--cyber-blue);"></div>
+                    
+                    <div style="text-align: center;">
+                        <div style="color: var(--matrix-green); font-size: 1.2em;">v2.0.0</div>
+                        <div style="color: #888; font-size: 0.9em;">Версия</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="adminFooter" class="admin-footer">
+                <h4 style="color: var(--hacker-red); margin-bottom: 10px;">
+                    <i class="fas fa-user-shield"></i> АДМИН ПАНЕЛЬ
+                </h4>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="cyber-btn btn-red" onclick="giveAllMoney()" style="padding: 8px 16px; font-size: 0.9em;">
+                        Деньги x10K
+                    </button>
+                    <button class="cyber-btn" onclick="resetAllCooldowns()" style="padding: 8px 16px; font-size: 0.9em;">
+                        Энергия 100%
+                    </button>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Authorization Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-user-lock"></i> АВТОРИЗАЦИЯ
+                </h2>
+                <button class="close-modal" onclick="closeModal('authModal')">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <i class="fas fa-user-secret" style="font-size: 4em; color: var(--neon-orange);"></i>
+            </div>
+            
+            <div style="max-width: 400px; margin: 0 auto;">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; color: var(--cyber-blue); margin-bottom: 8px;">
+                        <i class="fas fa-envelope"></i> Email:
+                    </label>
+                    <input type="email" id="loginEmail" placeholder="hacker@cyber.space" style="width: 100%; padding: 12px; background: rgba(0, 30, 15, 0.7); border: 2px solid var(--cyber-blue); border-radius: 8px; color: white; font-size: 1em;">
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <label style="display: block; color: var(--matrix-green); margin-bottom: 8px;">
+                        <i class="fas fa-key"></i> Пароль:
+                    </label>
+                    <input type="password" id="loginPassword" placeholder="Введите пароль" style="width: 100%; padding: 12px; background: rgba(0, 30, 15, 0.7); border: 2px solid var(--matrix-green); border-radius: 8px; color: white; font-size: 1em;">
+                </div>
+                
+                <button class="cyber-btn btn-green" onclick="login()" style="width: 100%; padding: 15px; font-size: 1.1em;">
+                    <i class="fas fa-sign-in-alt"></i> ВОЙТИ / РЕГИСТРАЦИЯ
+                </button>
+                
+                <div style="text-align: center; margin-top: 20px; color: #888;">
+                    <i class="fas fa-info-circle"></i> При первом входе будет создан новый аккаунт
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Panel Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-user-shield"></i> АДМИН ПАНЕЛЬ
+                </h2>
+                <button class="close-modal" onclick="closeAdminPanel()">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <i class="fas fa-terminal" style="font-size: 3em; color: var(--hacker-red);"></i>
+                <p style="color: #888; margin-top: 10px;">Доступ к системным функциям</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
+                <div class="mini-game-card" onclick="giveAllMoney()">
+                    <div class="game-icon">💰</div>
+                    <div class="game-title">Деньги x10K</div>
+                    <div class="game-desc">Добавить 10000₽ и валюту</div>
+                </div>
+                
+                <div class="mini-game-card" onclick="resetAllCooldowns()">
+                    <div class="game-icon">⚡</div>
+                    <div class="game-title">Энергия 100%</div>
+                    <div class="game-desc">Восстановить всю энергию</div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(255, 0, 0, 0.1); border: 2px solid var(--hacker-red); border-radius: 10px; padding: 20px; margin-top: 30px;">
+                <h4 style="color: var(--hacker-red); margin-bottom: 10px;">
+                    <i class="fas fa-exclamation-triangle"></i> ВНИМАНИЕ
+                </h4>
+                <p style="color: #ffaaaa;">
+                    Используйте админ функции осторожно. Чрезмерное использование может нарушить игровой баланс.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Orange Shop Modal -->
+    <div id="orangeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" style="color: #ff6b00;">
+                    <i class="fas fa-shopping-cart"></i> ORANGE SHOP
+                </h2>
+                <button class="close-modal" onclick="closeModal('orangeModal')">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 3em; color: #ff6b00;">🛒</div>
+                <p style="color: #888; margin-top: 10px;">Покупки за FUNCOIN</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0;">
+                <div style="background: rgba(255, 107, 0, 0.1); border: 2px solid #ff6b00; border-radius: 10px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">💼</div>
+                    <div style="font-weight: bold; color: #ff6b00; margin-bottom: 10px;">Премиум работа</div>
+                    <div style="color: #888; margin-bottom: 15px;">Доход x2 на 24 часа</div>
+                    <button class="cyber-btn" onclick="buyItem('premium_work', 500)" style="background: #ff6b00; padding: 10px;">500 FUN</button>
+                </div>
+                
+                <div style="background: rgba(255, 107, 0, 0.1); border: 2px solid #ff6b00; border-radius: 10px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">🛡️</div>
+                    <div style="font-weight: bold; color: #ff6b00; margin-bottom: 10px;">Защита от взлома</div>
+                    <div style="color: #888; margin-bottom: 15px;">-50% к риску на 48 часов</div>
+                    <button class="cyber-btn" onclick="buyItem('hack_protection', 300)" style="background: #ff6b00; padding: 10px;">300 FUN</button>
+                </div>
+                
+                <div style="background: rgba(255, 107, 0, 0.1); border: 2px solid #ff6b00; border-radius: 10px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">⛏️</div>
+                    <div style="font-weight: bold; color: #ff6b00; margin-bottom: 10px;">Бустер майнинга</div>
+                    <div style="color: #888; margin-bottom: 15px;">Доход от майнинга +100%</div>
+                    <button class="cyber-btn" onclick="buyItem('mining_booster', 400)" style="background: #ff6b00; padding: 10px;">400 FUN</button>
+                </div>
+            </div>
+            
+            <div style="background: rgba(255, 107, 0, 0.2); border-radius: 10px; padding: 20px; text-align: center; margin-top: 30px;">
+                <div style="color: #ff6b00; font-weight: bold; font-size: 1.2em;">
+                    Ваш баланс: <span id="funcoinBalance" style="color: white;">0</span> FUNCOIN
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Black Shop Modal -->
+    <div id="blackModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" style="color: #000;">
+                    <i class="fas fa-shopping-bag"></i> BLACK SHOP
+                </h2>
+                <button class="close-modal" onclick="closeModal('blackModal')">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 3em; color: #000;">⚫</div>
+                <p style="color: #888; margin-top: 10px;">Покупки за рубли ₽</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0;">
+                <div style="background: rgba(0, 0, 0, 0.8); border: 2px solid #333; border-radius: 10px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px; color: #ff6b00;">₿</div>
+                    <div style="font-weight: bold; color: #f7931a; margin-bottom: 10px;">0.001 BTC</div>
+                    <div style="color: #888; margin-bottom: 15px;">≈ 5000₽</div>
+                    <button class="cyber-btn" onclick="buyWithRubles('btc', 0.001, 5000)" style="background: #f7931a; padding: 10px;">КУПИТЬ</button>
+                </div>
+                
+                <div style="background: rgba(0, 0, 0, 0.8); border: 2px solid #333; border-radius: 10px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px; color: #627eea;">Ξ</div>
+                    <div style="font-weight: bold; color: #627eea; margin-bottom: 10px;">0.01 ETH</div>
+                    <div style="color: #888; margin-bottom: 15px;">≈ 3000₽</div>
+                    <button class="cyber-btn" onclick="buyWithRubles('eth', 0.01, 3000)" style="background: #627eea; padding: 10px;">КУПИТЬ</button>
+                </div>
+                
+                <div style="background: rgba(0, 0, 0, 0.8); border: 2px solid #333; border-radius: 10px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px; color: var(--neon-orange);">⚡</div>
+                    <div style="font-weight: bold; color: var(--neon-orange); margin-bottom: 10px;">1000 FUNCOIN</div>
+                    <div style="color: #888; margin-bottom: 15px;">≈ 1000₽</div>
+                    <button class="cyber-btn" onclick="buyWithRubles('funcoin', 1000, 1000)" style="background: var(--neon-orange); padding: 10px;">КУПИТЬ</button>
+                </div>
+                
+                <div style="background: rgba(0, 0, 0, 0.8); border: 2px solid #333; border-radius: 10px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px; color: var(--cyber-blue);">💰</div>
+                    <div style="font-weight: bold; color: var(--cyber-blue); margin-bottom: 10px;">5000₽</div>
+                    <div style="color: #888; margin-bottom: 15px;">Бонус +20%</div>
+                    <button class="cyber-btn" onclick="buyWithRubles('cash', 6000, 5000)" style="background: var(--cyber-blue); padding: 10px;">КУПИТЬ</button>
+                </div>
+            </div>
+            
+            <div style="background: rgba(0, 0, 0, 0.9); border-radius: 10px; padding: 20px; text-align: center; margin-top: 30px; border: 2px solid #333;">
+                <div style="color: var(--neon-orange); font-weight: bold; font-size: 1.2em;">
+                    Ваш баланс: <span id="cashBalance" style="color: white;">0</span>₽
+                </div>
+            </div>
+            
+            <div style="background: rgba(255, 107, 0, 0.1); border-radius: 10px; padding: 20px; margin-top: 20px;">
+                <h4 style="color: var(--neon-orange); margin-bottom: 10px;">
+                    <i class="fas fa-info-circle"></i> КОНТАКТЫ ДЛЯ ПОКУПКИ
+                </h4>
+                <p style="color: #888; margin-bottom: 10px;">
+                    Для реальных покупок обращайтесь к разработчику:
+                </p>
+                <div style="background: rgba(0, 255, 65, 0.1); padding: 15px; border-radius: 8px; border-left: 3px solid var(--matrix-green);">
+                    <strong style="color: var(--matrix-green); font-size: 1.2em;">@AleshaPopovlch</strong>
+                    <div style="color: #888; margin-top: 5px;">Телеграм для связи</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Virus Attack Modal -->
+    <div id="virusAttackModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🦠 VIRUS ATTACK</h2>
+                <button class="close-modal" onclick="closeGameModal()">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <p style="color: #888;">Создавайте вирусы и заражайте системы!</p>
+                <div style="display: flex; justify-content: center; gap: 40px; margin: 20px 0;">
+                    <div>
+                        <div style="color: var(--matrix-green); font-size: 1.5em;" id="virusScore">0</div>
+                        <div style="color: #888;">Очки</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--hacker-red); font-size: 1.5em;" id="virusCount">0</div>
+                        <div style="color: #888;">Вирусы</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--neon-orange); font-size: 1.5em;" id="virusTime">45</div>
+                        <div style="color: #888;">Время</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-canvas" id="virusCanvas"></div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="cyber-btn" id="startVirusBtn" onclick="startVirusGame()">
+                    <i class="fas fa-play"></i> НАЧАТЬ АТАКУ
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Firewall Defense Modal -->
+    <div id="firewallDefenseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🛡️ FIREWALL DEFENSE</h2>
+                <button class="close-modal" onclick="closeGameModal()">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <p style="color: #888;">Защитите систему от атак!</p>
+                <div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
+                    <div>
+                        <div style="color: var(--matrix-green); font-size: 1.5em;" id="firewallScore">0</div>
+                        <div style="color: #888;">Очки</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--hacker-red); font-size: 1.5em;" id="firewallHealth">100</div>
+                        <div style="color: #888;">Здоровье</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--neon-orange); font-size: 1.5em;" id="firewallWave">1</div>
+                        <div style="color: #888;">Волна</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-canvas" id="firewallCanvas"></div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="cyber-btn" id="startFirewallBtn" onclick="startFirewallGame()">
+                    <i class="fas fa-play"></i> НАЧАТЬ ЗАЩИТУ
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Crypto Flip Modal -->
+    <div id="cryptoFlipModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🎮 CRYPTO FLIP</h2>
+                <button class="close-modal" onclick="closeGameModal()">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <p style="color: #888;">Угадайте сторону монеты!</p>
+                <div style="display: flex; justify-content: center; gap: 40px; margin: 20px 0;">
+                    <div>
+                        <div style="color: var(--matrix-green); font-size: 1.5em;" id="flipBalance">1000</div>
+                        <div style="color: #888;">Баланс</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--neon-orange); font-size: 1.5em;" id="flipBet">100</div>
+                        <div style="color: #888;">Ставка</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--cyber-blue); font-size: 1.5em;" id="flipWinStreak">0</div>
+                        <div style="color: #888;">Серия</div>
+                    </div>
+                </div>
+                
+                <div style="margin: 30px 0;">
+                    <div style="font-size: 5em; margin-bottom: 20px;" id="coinDisplay">🪙</div>
+                    <div id="resultDisplay" style="color: var(--matrix-green); font-size: 1.2em; min-height: 30px;"></div>
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: center; gap: 20px; margin: 30px 0;">
+                <button class="cyber-btn" onclick="placeBet('heads')" style="background: #f7931a; width: 150px;">
+                    ОРЕЛ (x2)
+                </button>
+                <button class="cyber-btn" onclick="placeBet('tails')" style="background: #627eea; width: 150px;">
+                    РЕШКА (x2)
+                </button>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <button class="cyber-btn" onclick="changeBet(-100)" style="width: 60px;">-100</button>
+                    <button class="cyber-btn" onclick="changeBet(-10)" style="width: 60px;">-10</button>
+                    <button class="cyber-btn" onclick="changeBet(10)" style="width: 60px;">+10</button>
+                    <button class="cyber-btn" onclick="changeBet(100)" style="width: 60px;">+100</button>
+                </div>
+                <button class="cyber-btn" onclick="allIn()" style="margin-top: 10px; background: var(--hacker-red);">
+                    ВСЁ ИЛИ НИЧЕГО!
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bitcoin Shooter Modal -->
+    <div id="bitcoinShooterModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">₿ BITCOIN SHOOTER</h2>
+                <button class="close-modal" onclick="closeGameModal()">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <p style="color: #888;">Стреляйте по биткоинам и зарабатывайте!</p>
+                <div style="display: flex; justify-content: center; gap: 40px; margin: 20px 0;">
+                    <div>
+                        <div style="color: var(--matrix-green); font-size: 1.5em;" id="shooterScore">0</div>
+                        <div style="color: #888;">Очки</div>
+                    </div>
+                    <div>
+                        <div style="color: #f7931a; font-size: 1.5em;" id="shooterBitcoins">0</div>
+                        <div style="color: #888;">Биткоины</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--neon-orange); font-size: 1.5em;" id="shooterTime">60</div>
+                        <div style="color: #888;">Время</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-canvas" id="bitcoinCanvas"></div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="cyber-btn" id="startShooterBtn" onclick="startBitcoinShooter()">
+                    <i class="fas fa-play"></i> НАЧАТЬ ИГРУ
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Crypto Runner Modal -->
+    <div id="cryptoRunnerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🏃 CRYPTO RUNNER</h2>
+                <button class="close-modal" onclick="closeGameModal()">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <p style="color: #888;">Бегите, собирайте криптовалюту!</p>
+                <div style="display: flex; justify-content: center; gap: 40px; margin: 20px 0;">
+                    <div>
+                        <div style="color: var(--matrix-green); font-size: 1.5em;" id="runnerScore">0</div>
+                        <div style="color: #888;">Очки</div>
+                    </div>
+                    <div>
+                        <div style="color: #ffd700; font-size: 1.5em;" id="runnerCoins">0</div>
+                        <div style="color: #888;">Монеты</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--hacker-red); font-size: 1.5em;" id="runnerHealth">100</div>
+                        <div style="color: #888;">Здоровье</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-canvas" id="runnerCanvas"></div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="cyber-btn" id="startRunnerBtn" onclick="startCryptoRunner()">
+                    <i class="fas fa-play"></i> НАЧАТЬ ЗАБЕГ
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hacking Simulator Modal -->
+    <div id="hackingSimulatorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">💻 HACKING SIMULATOR</h2>
+                <button class="close-modal" onclick="closeGameModal()">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <p style="color: #888;">Найдите уязвимости в коде!</p>
+                <div style="display: flex; justify-content: center; gap: 40px; margin: 20px 0;">
+                    <div>
+                        <div style="color: var(--matrix-green); font-size: 1.5em;" id="hackingScore">0</div>
+                        <div style="color: #888;">Очки</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--hacker-red); font-size: 1.5em;" id="hackingAttempts">5</div>
+                        <div style="color: #888;">Попытки</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--neon-orange); font-size: 1.5em;" id="hackingFound">0</div>
+                        <div style="color: #888;">Найдено</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(0, 20, 10, 0.9); border: 2px solid var(--matrix-green); border-radius: 10px; padding: 20px; margin: 20px 0; height: 300px; overflow-y: auto;" id="hackingCode">
+                <!-- Код будет генерироваться динамически -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="cyber-btn" id="startHackingBtn" onclick="startHackingSimulator()">
+                    <i class="fas fa-play"></i> НАЧАТЬ ВЗЛОМ
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // ============ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ============
+        const ADMIN_PASSWORD = "admin33322";
+        
+        let currentUser = null;
+        let isAdmin = false;
+        
+        const gameData = {
+            player: {
+                username: '',
+                email: '',
+                cash: 0,
+                level: 1,
+                xp: 0,
+                xpToNext: 100,
+                funcoin: 0,
+                btc: 0,
+                eth: 0,
+                energy: 100,
+                skills: {
+                    hacking: 1,
+                    mining: 1,
+                    programming: 1
+                }
+            }
+        };
+
+        // ============ АВТОРИЗАЦИЯ И БАЗОВЫЙ ФУНКЦИОНАЛ ============
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showNotification('Введите email и пароль!', 'error');
+                return;
+            }
+            
+            // Проверяем админ пароль
+            if (password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                showNotification('Активирован режим администратора!', 'success');
+            }
+            
+            // Создаем пользователя
+            const username = email.split('@')[0] || 'Хакер';
+            
+            // Проверяем, есть ли сохраненные данные
+            const savedData = localStorage.getItem(`cyber_game_${email}`);
+            
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                Object.assign(gameData.player, parsedData);
+                showNotification(`Добро пожаловать обратно, ${gameData.player.username}!`, 'success');
+            } else {
+                // Создаем нового пользователя
+                gameData.player = {
+                    username: username,
+                    email: email,
+                    cash: 100,
+                    level: 1,
+                    xp: 0,
+                    xpToNext: 100,
+                    funcoin: 50,
+                    btc: 0,
+                    eth: 0,
+                    energy: 100,
+                    skills: {
+                        hacking: 1,
+                        mining: 1,
+                        programming: 1
+                    }
+                };
+                showNotification(`Добро пожаловать, ${username}! Получен стартовый бонус: 100₽ и 50 FUNCOIN`, 'success');
+            }
+            
+            currentUser = email;
+            
+            // Обновляем UI
+            updateUI();
+            
+            // Показываем кнопку выхода
+            document.getElementById('logoutBtn').style.display = 'block';
+            
+            // Показываем админ панель если админ
+            if (isAdmin) {
+                document.getElementById('adminFooter').style.display = 'block';
+            }
+            
+            // Сохраняем данные
+            saveGameData();
+            
+            // Закрываем модалку
+            closeModal('authModal');
+            
+            // Логируем вход
+            logGame(`> Пользователь ${gameData.player.username} вошел в систему`);
+        }
+
+        function logout() {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                currentUser = null;
+                isAdmin = false;
+                
+                // Скрываем кнопку выхода
+                document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('adminFooter').style.display = 'none';
+                
+                // Сбрасываем UI
+                document.getElementById('playerUsername').textContent = '[Гость]';
+                document.getElementById('cashAmount').textContent = '0₽';
+                document.getElementById('playerLevel').textContent = '1';
+                document.getElementById('playerEnergy').textContent = '100%';
+                document.getElementById('playerXP').textContent = '0/100';
+                
+                showNotification('Вы вышли из системы', 'info');
+            }
+        }
+
+        function saveGameData() {
+            if (currentUser) {
+                localStorage.setItem(`cyber_game_${currentUser}`, JSON.stringify(gameData.player));
+            }
+        }
+
+        function checkAuth() {
+            const savedEmail = localStorage.getItem('last_user');
+            if (savedEmail) {
+                const savedData = localStorage.getItem(`cyber_game_${savedEmail}`);
+                if (savedData) {
+                    // Автоматический вход
+                    const parsedData = JSON.parse(savedData);
+                    Object.assign(gameData.player, parsedData);
+                    currentUser = savedEmail;
+                    document.getElementById('logoutBtn').style.display = 'block';
+                    updateUI();
+                    showNotification(`Автовход: Добро пожаловать, ${gameData.player.username}!`, 'success');
+                }
+            }
+        }
+
+        // ============ ОСНОВНЫЕ ФУНКЦИИ ИГРЫ ============
+
+        function playScene(scene) {
+            if (!currentUser) {
+                showNotification('Сначала войдите в систему!', 'error');
+                document.getElementById('authModal').style.display = 'flex';
+                return;
+            }
+            
+            if (gameData.player.energy <= 0) {
+                showNotification('Недостаточно энергии! Подождите или используйте админ функции', 'error');
+                return;
+            }
+            
+            let income = 0;
+            let xp = 0;
+            let energyCost = 10;
+            
+            switch(scene) {
+                case 'work':
+                    income = 50 + (gameData.player.skills.programming * 10);
+                    xp = 10;
+                    logGame(`> Выполнена работа: +${income}₽`);
+                    break;
+                    
+                case 'hack':
+                    income = 100 + (gameData.player.skills.hacking * 25);
+                    xp = 20;
+                    gameData.player.skills.hacking += 0.1;
+                    logGame(`> Успешный взлом: +${income}₽`);
+                    break;
+                    
+                case 'mine':
+                    income = 75 + (gameData.player.skills.mining * 15);
+                    xp = 15;
+                    gameData.player.skills.mining += 0.1;
+                    
+                    // Шанс найти криптовалюту
+                    if (Math.random() > 0.7) {
+                        const cryptoType = Math.random() > 0.5 ? 'btc' : 'eth';
+                        const amount = cryptoType === 'btc' ? 0.000001 : 0.0001;
+                        
+                        if (cryptoType === 'btc') {
+                            gameData.player.btc += amount;
+                        } else {
+                            gameData.player.eth += amount;
+                        }
+                        
+                        logGame(`> Найден ${cryptoType === 'btc' ? 'Bitcoin' : 'Ethereum'}: +${amount}`);
+                    }
+                    logGame(`> Майнинг завершен: +${income}₽`);
+                    break;
+            }
+            
+            // Применяем изменения
+            gameData.player.cash += income;
+            gameData.player.xp += xp;
+            gameData.player.energy -= energyCost;
+            
+            // Проверяем уровень
+            if (gameData.player.xp >= gameData.player.xpToNext) {
+                gameData.player.level++;
+                gameData.player.xp = 0;
+                gameData.player.xpToNext = Math.floor(gameData.player.xpToNext * 1.5);
+                gameData.player.energy = 100;
+                gameData.player.cash += 500;
+                gameData.player.funcoin += 25;
+                
+                showNotification(`Поздравляем! Вы достигли ${gameData.player.level} уровня!`, 'success');
+                logGame(`> Достигнут новый уровень: ${gameData.player.level}`);
+            }
+            
+            // Обновляем UI
+            updateUI();
+            saveGameData();
+            
+            // Показываем уведомление
+            showNotification(`Выполнено: +${income}₽, +${xp} опыта`, 'success');
+        }
+
+        function upgradeSkill(skill) {
+            if (!currentUser) {
+                showNotification('Сначала войдите в систему!', 'error');
+                return;
+            }
+            
+            const cost = Math.floor(gameData.player.skills[skill] * 100);
+            
+            if (gameData.player.cash < cost) {
+                showNotification(`Недостаточно денег! Нужно ${cost}₽`, 'error');
+                return;
+            }
+            
+            gameData.player.cash -= cost;
+            gameData.player.skills[skill] += 1;
+            
+            updateUI();
+            saveGameData();
+            showNotification(`Навык "${skill}" улучшен до уровня ${gameData.player.skills[skill]}!`, 'success');
+            logGame(`> Улучшен навык ${skill}: уровень ${gameData.player.skills[skill]}`);
+        }
+
+        function showMiniGames() {
+            if (!currentUser) {
+                showNotification('Сначала войдите в систему!', 'error');
+                document.getElementById('authModal').style.display = 'flex';
+                return;
+            }
+            
+            document.getElementById('miniGamesSection').style.display = 'block';
+            document.getElementById('gameScene').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openOrangeShop() {
+            if (!currentUser) {
+                showNotification('Сначала войдите в систему!', 'error');
+                document.getElementById('authModal').style.display = 'flex';
+                return;
+            }
+            document.getElementById('orangeModal').style.display = 'flex';
+            document.getElementById('funcoinBalance').textContent = gameData.player.funcoin;
+        }
+
+        function openBlackShop() {
+            if (!currentUser) {
+                showNotification('Сначала войдите в систему!', 'error');
+                document.getElementById('authModal').style.display = 'flex';
+                return;
+            }
+            document.getElementById('blackModal').style.display = 'flex';
+            updateBlackShop();
+        }
+
+        // ============ ФУНКЦИИ МАГАЗИНОВ ============
+
+        function updateBlackShop() {
+            document.getElementById('cashBalance').textContent = gameData.player.cash.toLocaleString();
+        }
+
+        function buyWithRubles(type, amount, price) {
+            if (!currentUser) return;
+            
+            if (gameData.player.cash < price) {
+                showNotification(`Недостаточно денег! Нужно ${price}₽`, 'error');
+                return;
+            }
+            
+            if (confirm(`Купить ${type === 'btc' ? amount + ' BTC' : type === 'eth' ? amount + ' ETH' : type === 'funcoin' ? amount + ' FUNCOIN' : amount + '₽'} за ${price}₽?`)) {
+                gameData.player.cash -= price;
+                
+                switch(type) {
+                    case 'btc':
+                        gameData.player.btc += amount;
+                        break;
+                    case 'eth':
+                        gameData.player.eth += amount;
+                        break;
+                    case 'funcoin':
+                        gameData.player.funcoin += amount;
+                        break;
+                    case 'cash':
+                        gameData.player.cash += amount;
+                        break;
+                }
+                
+                updateUI();
+                updateBlackShop();
+                saveGameData();
+                showNotification(`Покупка успешна!`, 'success');
+                logGame(`> Куплено в BLACK SHOP: ${type} за ${price}₽`);
+            }
+        }
+
+        function buyItem(item, price) {
+            if (!currentUser) return;
+            
+            if (gameData.player.funcoin < price) {
+                showNotification(`Недостаточно FUNCOIN! Нужно ${price}`, 'error');
+                return;
+            }
+            
+            gameData.player.funcoin -= price;
+            
+            switch(item) {
+                case 'premium_work':
+                    showNotification('Премиум работа активирована на 24 часа!', 'success');
+                    break;
+                case 'hack_protection':
+                    showNotification('Защита от взлома активирована на 48 часов!', 'success');
+                    break;
+                case 'mining_booster':
+                    showNotification('Бустер майнинга активирован!', 'success');
+                    break;
+            }
+            
+            updateUI();
+            saveGameData();
+            logGame(`> Куплено в ORANGE SHOP: ${item} за ${price} FUN`);
+        }
+
+        // ============ АДМИН ФУНКЦИИ ============
+
+        function openAdminPanel() {
+            if (!isAdmin) {
+                const password = prompt('Введите пароль администратора:');
+                if (password === ADMIN_PASSWORD) {
+                    isAdmin = true;
+                    document.getElementById('adminFooter').style.display = 'block';
+                    showNotification('Режим администратора активирован!', 'success');
+                } else {
+                    showNotification('Неверный пароль!', 'error');
+                    return;
+                }
+            }
+            document.getElementById('adminModal').style.display = 'flex';
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        function giveAllMoney() {
+            if (!isAdmin) return;
+            
+            gameData.player.cash += 10000;
+            gameData.player.funcoin += 1000;
+            gameData.player.btc += 0.01;
+            gameData.player.eth += 0.1;
+            gameData.player.energy = 100;
+            
+            updateUI();
+            saveGameData();
+            showNotification('Админ бонус активирован!', 'success');
+            logGame('> Активирован админ бонус: деньги x10K');
+        }
+
+        function resetAllCooldowns() {
+            if (!isAdmin) return;
+            
+            gameData.player.energy = 100;
+            updateUI();
+            saveGameData();
+            showNotification('Энергия восстановлена!', 'success');
+            logGame('> Восстановлена энергия');
+        }
+
+        // ============ МИНИ-ИГРЫ ============
+
+        // VIRUS ATTACK
+        let virusInterval;
+        let virusScore = 0;
+        let virusCount = 0;
+        let virusTime = 45;
+
+        function startVirusGame() {
+            const canvas = document.getElementById('virusCanvas');
+            canvas.innerHTML = '';
+            
+            virusScore = 0;
+            virusCount = 0;
+            virusTime = 45;
+            
+            document.getElementById('virusScore').textContent = virusScore;
+            document.getElementById('virusCount').textContent = virusCount;
+            document.getElementById('virusTime').textContent = virusTime;
+            document.getElementById('startVirusBtn').disabled = true;
+            
+            function createVirus() {
+                if (virusTime <= 0) return;
+                
+                const virus = document.createElement('div');
+                virus.className = 'virus';
+                virus.style.left = Math.random() * (canvas.offsetWidth - 40) + 'px';
+                virus.style.top = Math.random() * (canvas.offsetHeight - 40) + 'px';
+                
+                virus.onclick = function(e) {
+                    e.stopPropagation();
+                    virusScore += 50;
+                    virusCount++;
+                    
+                    document.getElementById('virusScore').textContent = virusScore;
+                    document.getElementById('virusCount').textContent = virusCount;
+                    
+                    // Эффект уничтожения
+                    this.style.transform = 'scale(2)';
+                    this.style.opacity = '0';
+                    
+                    // Награда
+                    gameData.player.cash += 25;
+                    gameData.player.xp += 5;
+                    updateUI();
+                    
+                    setTimeout(() => this.remove(), 200);
+                    
+                    // Создаем новый вирус
+                    setTimeout(createVirus, 500);
+                };
+                
+                canvas.appendChild(virus);
+            }
+            
+            // Создаем первые вирусы
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => createVirus(), i * 1000);
+            }
+            
+            // Создаем новые вирусы
+            const virusCreator = setInterval(() => {
+                if (virusTime > 0 && virusCount < 10) {
+                    createVirus();
+                }
+            }, 2000);
+            
+            // Таймер игры
+            virusInterval = setInterval(() => {
+                virusTime--;
+                document.getElementById('virusTime').textContent = virusTime;
+                
+                if (virusTime <= 0) {
+                    clearInterval(virusInterval);
+                    clearInterval(virusCreator);
+                    document.getElementById('startVirusBtn').disabled = false;
+                    
+                    // Награда за итоговый счет
+                    const cashReward = virusScore;
+                    const xpReward = Math.floor(virusScore / 10);
+                    
+                    gameData.player.cash += cashReward;
+                    gameData.player.xp += xpReward;
+                    gameData.player.skills.hacking += 0.2;
+                    updateUI();
+                    saveGameData();
+                    
+                    showNotification(`Вирусная атака завершена! Уничтожено вирусов: ${virusCount} (+${cashReward}₽)`, 'success');
+                    logGame(`> Virus Attack завершен со счётом ${virusScore}`);
+                }
+            }, 1000);
+        }
+
+        // FIREWALL DEFENSE
+        let firewallInterval;
+        let firewallScore = 0;
+        let firewallHealth = 100;
+        let firewallWave = 1;
+        let attacks = [];
+
+        function startFirewallGame() {
+            const canvas = document.getElementById('firewallCanvas');
+            canvas.innerHTML = '';
+            
+            firewallScore = 0;
+            firewallHealth = 100;
+            firewallWave = 1;
+            attacks = [];
+            
+            document.getElementById('firewallScore').textContent = firewallScore;
+            document.getElementById('firewallHealth').textContent = firewallHealth;
+            document.getElementById('firewallWave').textContent = firewallWave;
+            document.getElementById('startFirewallBtn').disabled = true;
+            
+            // Создаем файрвол
+            const firewall = document.createElement('div');
+            firewall.className = 'firewall';
+            firewall.id = 'firewall';
+            firewall.style.left = '50%';
+            firewall.style.transform = 'translateX(-50%)';
+            canvas.appendChild(firewall);
+            
+            // Создаем атаки
+            function createAttack() {
+                const attack = document.createElement('div');
+                attack.className = 'trojan';
+                attack.style.left = Math.random() * (canvas.offsetWidth - 40) + 'px';
+                attack.style.top = '0px';
+                canvas.appendChild(attack);
+                
+                attacks.push({
+                    element: attack,
+                    y: 0,
+                    speed: 1 + firewallWave * 0.3
+                });
+            }
+            
+            // Игровой цикл
+            firewallInterval = setInterval(() => {
+                // Движение атак
+                attacks.forEach((attack, index) => {
+                    attack.y += attack.speed;
+                    attack.element.style.top = `${attack.y}px`;
+                    
+                    // Проверка попадания в файрвол
+                    if (attack.y > 300) {
+                        const attackRect = attack.element.getBoundingClientRect();
+                        const firewallRect = firewall.getBoundingClientRect();
+                        
+                        if (attackRect.left < firewallRect.right && 
+                            attackRect.right > firewallRect.left) {
+                            firewallScore += 100;
+                            firewallHealth -= 5;
+                            
+                            document.getElementById('firewallScore').textContent = firewallScore;
+                            document.getElementById('firewallHealth').textContent = firewallHealth;
+                            
+                            // Эффект попадания
+                            attack.element.style.opacity = '0';
+                            attack.element.style.transform = 'scale(2)';
+                            setTimeout(() => {
+                                if (attack.element.parentNode) {
+                                    attack.element.remove();
+                                }
+                            }, 200);
+                            
+                            attacks.splice(index, 1);
+                            
+                            // Награда
+                            gameData.player.cash += 10;
+                            updateUI();
+                            
+                            if (firewallHealth <= 0) {
+                                endFirewallGame();
+                                clearInterval(firewallInterval);
+                            }
+                        }
+                    }
+                    
+                    // Удаление вышедших за пределы
+                    if (attack.y > 400) {
+                        attack.element.remove();
+                        attacks.splice(index, 1);
+                        firewallHealth -= 10;
+                        document.getElementById('firewallHealth').textContent = firewallHealth;
+                    }
+                });
+                
+                // Создание новых атак
+                if (Math.random() < 0.1 + firewallWave * 0.05) {
+                    createAttack();
+                }
+                
+                // Новая волна
+                if (firewallScore >= firewallWave * 1000) {
+                    firewallWave++;
+                    document.getElementById('firewallWave').textContent = firewallWave;
+                    showNotification(`Волна ${firewallWave}!`, 'success');
+                }
+                
+            }, 50);
+        }
+
+        function endFirewallGame() {
+            clearInterval(firewallInterval);
+            document.getElementById('startFirewallBtn').disabled = false;
+            
+            const cashReward = firewallScore;
+            const xpReward = Math.floor(firewallScore / 20);
+            
+            gameData.player.cash += cashReward;
+            gameData.player.xp += xpReward;
+            gameData.player.skills.programming += 0.2;
+            updateUI();
+            saveGameData();
+            
+            showNotification(`Защита завершена! Счёт: ${firewallScore} (+${cashReward}₽)`, 'success');
+            logGame(`> Firewall Defense завершен со счётом ${firewallScore}`);
+        }
+
+        // CRYPTO FLIP
+        let flipBalance = 1000;
+        let flipBet = 100;
+        let flipWinStreak = 0;
+
+        function placeBet(side) {
+            if (flipBalance < flipBet) {
+                showNotification('Недостаточно средств для ставки!', 'error');
+                return;
+            }
+            
+            flipBalance -= flipBet;
+            document.getElementById('flipBalance').textContent = flipBalance;
+            
+            // Анимация монеты
+            const coin = document.getElementById('coinDisplay');
+            coin.style.transform = 'rotateY(0deg)';
+            
+            // Вращение монеты
+            let rotations = 0;
+            const spinInterval = setInterval(() => {
+                rotations++;
+                coin.style.transform = `rotateY(${rotations * 180}deg)`;
+                
+                if (rotations >= 5) {
+                    clearInterval(spinInterval);
+                    
+                    // Определяем результат
+                    const result = Math.random() > 0.5 ? 'heads' : 'tails';
+                    const win = result === side;
+                    
+                    // Отображаем результат
+                    coin.textContent = result === 'heads' ? '🦅' : '🐍';
+                    
+                    if (win) {
+                        const winAmount = flipBet * 2;
+                        flipBalance += winAmount;
+                        flipWinStreak++;
+                        
+                        document.getElementById('resultDisplay').textContent = `Победа! +${winAmount}`;
+                        document.getElementById('resultDisplay').style.color = '#00ff41';
+                        
+                        // Награда в основной игре
+                        gameData.player.cash += winAmount;
+                        gameData.player.xp += flipBet / 10;
+                        updateUI();
+                        saveGameData();
+                    } else {
+                        flipWinStreak = 0;
+                        document.getElementById('resultDisplay').textContent = 'Проигрыш!';
+                        document.getElementById('resultDisplay').style.color = '#ff3333';
+                    }
+                    
+                    document.getElementById('flipBalance').textContent = flipBalance;
+                    document.getElementById('flipWinStreak').textContent = flipWinStreak;
+                    
+                    // Автоматически обновляем ставку после выигрыша
+                    if (win && flipWinStreak >= 3) {
+                        flipBet = Math.min(flipBet * 2, 1000);
+                        document.getElementById('flipBet').textContent = flipBet;
+                    }
+                }
+            }, 100);
+        }
+
+        function changeBet(amount) {
+            flipBet = Math.max(10, Math.min(1000, flipBet + amount));
+            document.getElementById('flipBet').textContent = flipBet;
+        }
+
+        function allIn() {
+            flipBet = flipBalance;
+            document.getElementById('flipBet').textContent = flipBet;
+            showNotification(`Всё или ничего! Ставка: ${flipBet}`, 'warning');
+        }
+
+        // BITCOIN SHOOTER
+        let shooterInterval;
+        let shooterScore = 0;
+        let shooterBitcoins = 0;
+        let shooterTime = 60;
+
+        function startBitcoinShooter() {
+            const canvas = document.getElementById('bitcoinCanvas');
+            canvas.innerHTML = '';
+            
+            shooterScore = 0;
+            shooterBitcoins = 0;
+            shooterTime = 60;
+            
+            document.getElementById('shooterScore').textContent = shooterScore;
+            document.getElementById('shooterBitcoins').textContent = shooterBitcoins;
+            document.getElementById('shooterTime').textContent = shooterTime;
+            document.getElementById('startShooterBtn').disabled = true;
+            
+            function createBitcoin() {
+                if (shooterTime <= 0) return;
+                
+                const bitcoin = document.createElement('div');
+                bitcoin.className = 'bitcoin';
+                bitcoin.textContent = '₿';
+                bitcoin.style.left = Math.random() * (canvas.offsetWidth - 60) + 'px';
+                bitcoin.style.top = Math.random() * (canvas.offsetHeight - 60) + 'px';
+                
+                bitcoin.onclick = function(e) {
+                    e.stopPropagation();
+                    shooterScore += 100;
+                    shooterBitcoins++;
+                    
+                    document.getElementById('shooterScore').textContent = shooterScore;
+                    document.getElementById('shooterBitcoins').textContent = shooterBitcoins;
+                    
+                    // Эффект уничтожения
+                    this.style.transform = 'scale(2)';
+                    this.style.opacity = '0';
+                    
+                    // Награда
+                    gameData.player.cash += 50;
+                    gameData.player.xp += 10;
+                    updateUI();
+                    
+                    setTimeout(() => this.remove(), 200);
+                    
+                    // Создаем новый биткоин
+                    setTimeout(createBitcoin, 300);
+                };
+                
+                canvas.appendChild(bitcoin);
+            }
+            
+            // Создаем первые биткоины
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createBitcoin(), i * 500);
+            }
+            
+            // Создаем новые биткоины
+            const bitcoinCreator = setInterval(() => {
+                if (shooterTime > 0 && shooterBitcoins < 15) {
+                    createBitcoin();
+                }
+            }, 1500);
+            
+            // Таймер игры
+            shooterInterval = setInterval(() => {
+                shooterTime--;
+                document.getElementById('shooterTime').textContent = shooterTime;
+                
+                if (shooterTime <= 0) {
+                    clearInterval(shooterInterval);
+                    clearInterval(bitcoinCreator);
+                    document.getElementById('startShooterBtn').disabled = false;
+                    
+                    // Награда за итоговый счет
+                    const cashReward = shooterScore;
+                    const xpReward = Math.floor(shooterScore / 20);
+                    
+                    gameData.player.cash += cashReward;
+                    gameData.player.xp += xpReward;
+                    gameData.player.btc += shooterBitcoins * 0.000001;
+                    gameData.player.skills.mining += 0.3;
+                    updateUI();
+                    saveGameData();
+                    
+                    showNotification(`Игра завершена! Собрано биткоинов: ${shooterBitcoins} (+${cashReward}₽)`, 'success');
+                    logGame(`> Bitcoin Shooter завершен со счётом ${shooterScore}`);
+                }
+            }, 1000);
+        }
+
+        // ============ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ============
+
+        function openGameModal(game) {
+            if (!currentUser) {
+                showNotification('Сначала войдите в систему!', 'error');
+                document.getElementById('authModal').style.display = 'flex';
+                return;
+            }
+            
+            // Закрываем все модалки игр
+            const gameModals = ['virusAttackModal', 'firewallDefenseModal', 'cryptoFlipModal', 
+                               'bitcoinShooterModal', 'cryptoRunnerModal', 'hackingSimulatorModal'];
+            
+            gameModals.forEach(modalId => {
+                if (document.getElementById(modalId)) {
+                    document.getElementById(modalId).style.display = 'none';
+                }
+            });
+            
+            // Открываем нужную модалку
+            document.getElementById(`${game}Modal`).style.display = 'flex';
+            
+            // Инициализируем игру если нужно
+            if (game === 'cryptoFlip') {
+                flipBalance = 1000;
+                flipBet = 100;
+                flipWinStreak = 0;
+                
+                document.getElementById('flipBalance').textContent = flipBalance;
+                document.getElementById('flipBet').textContent = flipBet;
+                document.getElementById('flipWinStreak').textContent = flipWinStreak;
+                document.getElementById('coinDisplay').textContent = '🪙';
+                document.getElementById('resultDisplay').textContent = '';
+            }
+        }
+
+        function closeGameModal() {
+            const gameModals = ['virusAttackModal', 'firewallDefenseModal', 'cryptoFlipModal',
+                               'bitcoinShooterModal', 'cryptoRunnerModal', 'hackingSimulatorModal'];
+            
+            gameModals.forEach(modalId => {
+                if (document.getElementById(modalId)) {
+                    document.getElementById(modalId).style.display = 'none';
+                }
+            });
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function updateUI() {
+            if (currentUser) {
+                document.getElementById('playerUsername').textContent = gameData.player.username;
+                document.getElementById('cashAmount').textContent = `${gameData.player.cash.toLocaleString()}₽`;
+                document.getElementById('playerLevel').textContent = gameData.player.level;
+                document.getElementById('playerEnergy').textContent = `${gameData.player.energy}%`;
+                document.getElementById('playerXP').textContent = `${gameData.player.xp}/${gameData.player.xpToNext}`;
+                document.getElementById('btcAmount').textContent = gameData.player.btc.toFixed(8);
+                document.getElementById('ethAmount').textContent = gameData.player.eth.toFixed(4);
+                document.getElementById('funcoinAmount').textContent = gameData.player.funcoin.toLocaleString();
+                
+                // Обновляем черный магазин если он открыт
+                if (document.getElementById('cashBalance')) {
+                    document.getElementById('cashBalance').textContent = gameData.player.cash.toLocaleString();
+                }
+                
+                // Обновляем оранжевый магазин если он открыт
+                if (document.getElementById('funcoinBalance')) {
+                    document.getElementById('funcoinBalance').textContent = gameData.player.funcoin;
+                }
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            
+            // Устанавливаем цвет в зависимости от типа
+            let color = '';
+            switch(type) {
+                case 'success': color = '#00ff41'; break;
+                case 'error': color = '#ff3333'; break;
+                case 'warning': color = '#ff6b00'; break;
+                default: color = '#00a8ff'; break;
+            }
+            
+            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+            notification.style.borderLeftColor = color;
+            notification.style.display = 'block';
+            
+            // Скрываем уведомление через 3 секунды
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function logGame(message) {
+            const gameLog = document.getElementById('gameLog');
+            const newLog = document.createElement('div');
+            newLog.style.color = '#888';
+            newLog.style.marginBottom = '10px';
+            newLog.textContent = message;
+            
+            gameLog.appendChild(newLog);
+            gameLog.scrollTop = gameLog.scrollHeight;
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            if (!currentUser) {
+                showNotification('Сначала войдите в систему!', 'error');
+                return;
+            }
+            
+            const chat = document.getElementById('multiplayerChat');
+            const newMessage = document.createElement('div');
+            newMessage.innerHTML = `<strong style="color: ${gameData.player.level > 5 ? '#ff6b00' : '#00a8ff'};">${gameData.player.username}:</strong> ${message}`;
+            newMessage.style.marginBottom = '8px';
+            newMessage.style.color = '#aaa';
+            
+            chat.appendChild(newMessage);
+            chat.scrollTop = chat.scrollHeight;
+            
+            input.value = '';
+            
+            // Симуляция ответа от других игроков
+            setTimeout(() => {
+                const responses = [
+                    'Круто!',
+                    'Я тоже так могу!',
+                    'Где взять столько денег?',
+                    'Кто хочет в кооператив?',
+                    'Админ, добавь денег!',
+                    'Лучшая игра!'
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                const botNames = ['HackerPro', 'CryptoKing', 'BitcoinLord', 'DarkNet', 'CyberGhost'];
+                const randomBot = botNames[Math.floor(Math.random() * botNames.length)];
+                
+                const botMessage = document.createElement('div');
+                botMessage.innerHTML = `<strong style="color: #9d00ff;">${randomBot}:</strong> ${randomResponse}`;
+                botMessage.style.marginBottom = '8px';
+                botMessage.style.color = '#888';
+                
+                chat.appendChild(botMessage);
+                chat.scrollTop = chat.scrollHeight;
+            }, 1000);
+        }
+
+        function addChatMessage() {
+            if (!currentUser) return;
+            
+            const messages = [
+                'Только что взломал банк!',
+                'Намайнил 0.001 BTC!',
+                'Кто играет в мини-игры?',
+                'Как улучшить навыки?',
+                'Продаю аккаунт 10 уровня!',
+                'Ищу команду для хакерской атаки!'
+            ];
+            
+            const botNames = ['CyberNinja', 'DataThief', 'CodeBreaker', 'NetworkGhost', 'SystemCracker'];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            const randomBot = botNames[Math.floor(Math.random() * botNames.length)];
+            
+            const chat = document.getElementById('multiplayerChat');
+            const newMessage = document.createElement('div');
+            newMessage.innerHTML = `<strong style="color: #9d00ff;">${randomBot}:</strong> ${randomMessage}`;
+            newMessage.style.marginBottom = '8px';
+            newMessage.style.color = '#888';
+            
+            chat.appendChild(newMessage);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function handleKeyPress(e) {
+            // Управление для игр
+            switch(e.key) {
+                case 'Escape':
+                    closeGameModal();
+                    break;
+                case ' ':
+                    // Пробел для паузы/старта игр
+                    break;
+            }
+        }
+
+        // ============ ИНИЦИАЛИЗАЦИЯ ============
+
+        window.onload = function() {
+            // Проверить авторизацию
+            checkAuth();
+            
+            // Инициализация
+            updateUI();
+            
+            // Симуляция онлайн игроков
+            setInterval(() => {
+                const online = 12 + Math.floor(Math.random() * 48);
+                document.getElementById('onlineCount').textContent = online;
+                
+                if (Math.random() > 0.7) {
+                    addChatMessage();
+                }
+            }, 5000);
+            
+            // Добавляем обработчик клавиш для игр
+            document.addEventListener('keydown', handleKeyPress);
+            
+            // Авто-сохранение каждые 30 секунд
+            setInterval(() => {
+                if (currentUser) {
+                    saveGameData();
+                }
+            }, 30000);
+            
+            // Восстановление энергии со временем
+            setInterval(() => {
+                if (currentUser && gameData.player.energy < 100) {
+                    gameData.player.energy = Math.min(100, gameData.player.energy + 1);
+                    updateUI();
+                }
+            }, 60000); // 1% в минуту
+        };
+
+        // ============ ДОПОЛНИТЕЛЬНЫЕ ИГРЫ (для полноты) ============
+
+        function startCryptoRunner() {
+            showNotification('Crypto Runner скоро будет доступен!', 'info');
+        }
+
+        function startHackingSimulator() {
+            showNotification('Hacking Simulator скоро будет доступен!', 'info');
+        }
+    </script>
+</body>
+</html>
